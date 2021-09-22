@@ -16,9 +16,11 @@ class TodoController extends Controller
      */
     public function index()
     {
+        // モデルに定義した関数を実行する．
+        $todos = Todo::getAllOrderByDeadline();
         return view('todo.index', [
-            'todos' => []
-          ]);
+            'todos' => $todos
+        ]);
     }
 
     /**
@@ -39,7 +41,23 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // バリデーション
+        $validator = Validator::make($request->all(), [
+            'todo' => 'required | max:191',
+            'deadline' => 'required',
+        ]);
+        // バリデーション:エラー
+        if ($validator->fails()) {
+            return redirect()
+            ->route('todo.create')
+            ->withInput()
+            ->withErrors($validator);
+        }
+        // create()は最初から用意されている関数
+        // 戻り値は挿入されたレコードの情報
+        $result = Todo::create($request->all());
+        // ルーティング「todo.index」にリクエスト送信（一覧ページに移動）
+        return redirect()->route('todo.index');
     }
 
     /**
