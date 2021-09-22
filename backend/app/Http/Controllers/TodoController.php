@@ -22,7 +22,7 @@ class TodoController extends Controller
     public function index()
     {
         // モデルに定義した関数を実行する．
-        $todos = Todo::getAllOrderByDeadline();
+        $todos = Todo::getMyAllOrderByDeadline();
         return view('todo.index', [
             'todos' => $todos
         ]);
