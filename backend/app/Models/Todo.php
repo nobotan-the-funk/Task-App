@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Todo extends Model
 {
     use HasFactory;
+
+    // アプリケーション側でcreateなどできない値を記述
+    // ↓以下の処理を記述
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
+
+    // 締切が早い順にソートしてデータを参照する処理
+    public static function getAllOrderByDeadline()
+    {
+        return self::orderBy('deadline', 'asc')->get();
+    }
 }
